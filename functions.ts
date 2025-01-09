@@ -80,19 +80,26 @@ function processLines(lines: string[]): string[] {
     .map(line => line.toUpperCase() + "!"); // Convert to uppercase and add "!"
 }
 
+function processLinesToLowerCase(lines: string[]): string[] {
+  return lines
+    .filter(line => line.trim() !== "") // Ignore empty lines
+    .map(line => line.toLocaleLowerCase() + "!"); // Convert to uppercase and add "!"
+}
+
 function writeFile(filePath: string, content: string): void {
   fs.writeFileSync(filePath, content);
 }
 
-function processFile(inputFilePath: string, outputFilePath: string): void {
+function processFile(inputFilePath: string, outputFilePath: string, processPredicate: Function): void {
   const data = readFile(inputFilePath);
   const lines = data.split("\n");
-  const processedLines = processLines(lines);
+  const processedLines = processPredicate(lines);
   const processedContent = processedLines.join("\n");
   writeFile(outputFilePath, processedContent);
   console.log("File processed successfully!");
 }
 
+processFile("input.txt", "output.txt", processLinesToLowerCase);
 
 // 1. Funções pequenas
 
